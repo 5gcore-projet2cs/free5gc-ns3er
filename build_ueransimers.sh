@@ -250,7 +250,7 @@ EOF
       - ./config/extra-ues/uecfg${I}_1.yaml:/ueransim/config/uecfg1.yaml
       - ./config/extra-ues/uecfg${I}_2.yaml:/ueransim/config/uecfg2.yaml
       - ./ueransim/packet_forwarder_duo.py.py:/ueransim/config/packet_forwarder.py
-      - ./ueransim/run_duo.sh:/ueransim/run.sh
+      - ./ueransim/run.sh:/ueransim/run.sh
     cap_add:
       - NET_ADMIN
     devices:

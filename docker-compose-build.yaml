@@ -331,7 +331,7 @@ services:
       - ./config/gnbcfg.yaml:/ueransim/config/gnbcfg.yaml
       - ./config/uecfg.yaml:/ueransim/config/uecfg.yaml
       - ./ueransim/packet_forwarder_mono.py:/ueransim/config/packet_forwarder.py
-      - ./ueransim/run_mono.sh:/ueransim/run.sh
+      - ./ueransim/run.sh:/ueransim/run.sh
     cap_add:
       - NET_ADMIN
     devices:
