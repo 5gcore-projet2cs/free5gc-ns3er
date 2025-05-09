@@ -1,0 +1,49 @@
+## GET ALL CONTAINERS @IP
+sudo docker ps --format "{{.ID}}" | xargs -I {} sudo docker inspect -f '{{.Name}} -> {{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {} 
+ 
+/n3iwue -> 10.100.200.203
+/chf -> 10.100.200.13
+/n3iwf -> 10.100.200.15
+/ueransim -> 10.100.200.14
+/smf -> 10.100.200.12
+/udm -> 10.100.200.7
+/amf -> 10.100.200.16
+/pcf -> 10.100.200.11
+/udr -> 10.100.200.8
+/webui -> 10.100.200.6
+/nssf -> 10.100.200.5
+/nef -> 10.100.200.10
+/ausf -> 10.100.200.9
+/nrf -> 10.100.200.4
+/upf -> 10.100.200.2
+/mongodb -> 10.100.200.3
+
+## SHOW IP INTERFACES
+apt install net-tools -y
+ip a
+ifconfig
+
+## SHOW IP ROUTES
+ip route show
+ip route del default via 10.100.200.1 dev eth0 [remove eth @ip default gateways]
+ip route add default via 10.60.0.1 dev uesimtun0 [remove uesimtun0 @ip default gateways]
+
+## GET CERTAIN CONTAINERS @IP
+sudo docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' upf
+
+## UE UERANSIM client autorun
+./nr-ue -c ./config/uecfg.yaml
+./nr-gnb -c ./config/gnbcfg.yaml //it's already being executed in the docker compose
+
+## PING SERVER
+ping www.nokia.com
+ping www.nokia.com -I uesimtun0
+www.nokia.com <=> 184.31.173.9
+
+## DECAPSULE PACKETS
+tshark -r ./YOUPCAPFILE.pcap -Y "ip.src == 10.100.200.13 && ip.dst == 10.100.200.2 && gtp" -T fields -e ip.src -e ip.dst -e icmp.type -e gtp.teid > outer.csv
+
+## NS3 NEW COMMANDS
+sudo docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ueransim
+sudo ./ns3 connect 10.100.200.13
+./ns3 run scratch/ue.cpp -h 8.8.8.8 -c 10 -o captured -lpcap -lxlsxwriter
