@@ -151,7 +151,7 @@ integrityMaxRate:
 EOL
 
   # Register UE
-  curl -s -X POST "$SUBSCRIBER_URL/imsi-208${MNC}0000000${IMSI}/208${MNC}" \
+  UEresponse=$(curl -s -X POST "$SUBSCRIBER_URL/imsi-208${MNC}0000000${IMSI}/208${MNC}" \
     -H "Content-Type: application/json" \
     -H "Token: $access_token" \
     -d @- <<EOF
@@ -232,7 +232,7 @@ EOL
   "ChargingDatas": []
 }
 EOF
-> /dev/null
+)
   }
 
   write_and_register_ue "$UE_FILE1" "$IMSI1"
