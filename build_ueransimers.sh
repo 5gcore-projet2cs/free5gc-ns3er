@@ -26,10 +26,9 @@ get_access_token() {
   echo "Logging in to get the access token..."
   response=$(curl -s -X POST "$LOGIN_URL" \
     -H "Content-Type: application/json" \
-    -d '{"username": ${ADMIN_USER}, "password": {$ADMIN_PASS}}')
-  
+    -d "{\"username\": \"${ADMIN_USER}\", \"password\": \"${ADMIN_PASS}\"}")
+
   access_token=$(echo "$response" | jq -r '.access_token')
-  
   echo "Access token retrieved successfully."
 }
 get_access_token
@@ -48,6 +47,7 @@ if [ "$(ls -A "$UES_DIR"/*.yaml 2>/dev/null)" ]; then
     delete_subscriber "$full_imsi" "$MNC"
     i=$((i + 1))
   done
+  rm -f "$UES_DIR"/*.yaml
 fi
 
 
@@ -232,6 +232,7 @@ EOL
   "ChargingDatas": []
 }
 EOF
+> /dev/null
   }
 
   write_and_register_ue "$UE_FILE1" "$IMSI1"
